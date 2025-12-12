@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тест API</title>
+</head>
+<body>
+    <h1>Тест подключения к API</h1>
+    <button onclick="testAPI()">Тестировать API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const result = document.getElementById('result');
+            
+            try {
+                // Тест 1: Health check
+                const healthRes = await fetch('http://localhost:8000/health');
+                const healthData = await healthRes.json();
+                
+                // Тест 2: Регистрация
+                const registerRes = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: `test${Date.now()}@test.com`,
+                        password: 'password123',
+                        name: 'Test User'
+                    })
+                });
+                const registerData = await registerRes.json();
+                
+                result.innerHTML = `
+                    <h3>✅ API работает!</h3>
+                    <p>Health: ${healthData.status}</p>
+                    <p>Регистрация: ${registerData.message}</p>
+                    <p>Токен: ${registerData.data?.token ? 'Получен' : 'Ошибка'}</p>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <h3>❌ Ошибка!</h3>
+                    <p>${error.message}</p>
+                    <p>Проверьте:</p>
+                    <ul>
+                        <li>Бэкенд запущен на порту 8000</li>
+                        <li>CORS настроен правильно</li>
+                        <li>Нет ошибок в консоли</li>
+                    </ul>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
