@@ -1,4 +1,4 @@
-# 🚀 Project Management System - Frontend
+# Project Management System - Frontend
 
 ## 📋 О проекте
 Фронтенд для системы управления проектами. React + TypeScript приложение с современным UI.
